@@ -30,9 +30,8 @@ int ssh2_scp_write(const char *hostip,
                    char **errmsg)
 {
     unsigned long hostaddr;
-    int sock, i;
+    int sock;
     struct sockaddr_in sin;
-    const char *fingerprint;
     LIBSSH2_SESSION *session = NULL;
     LIBSSH2_CHANNEL *channel;
     FILE *local;
