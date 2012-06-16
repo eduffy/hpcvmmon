@@ -28,6 +28,9 @@ protected:
 signals:
    void closed(int screen);
 
+private slots:
+   void portFailure(QString const& errmsg);
+
 private:
    SSHPortConnection  ssh;
    VncView           *vnc;

@@ -16,7 +16,12 @@ public:
    void ForwardPort(int localPort, QString const& remoteHost, int remotePort);
 
    bool isInitialized() { return initialized == 1; }
+   bool isFinished() { return finished == 1; }
    void stop();
+
+signals:
+   void failure(QString const&);
+
 protected:
    void run();
 

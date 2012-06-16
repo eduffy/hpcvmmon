@@ -1,5 +1,6 @@
 
 #include <QCloseEvent>
+#include <QErrorMessage>
 #include "SSHPortConnection.h"
 #include "vncview.h"
 #include "VNCWindow.moc"
@@ -13,6 +14,7 @@ VNCWindow::VNCWindow(SSHCredentials *credentials,
    , ssh(credentials)
    , screen(screen_)
 {
+   connect(&ssh, SIGNAL(failure(QString const&)), this, SLOT(portFailure(QString const&)));
    ssh.ForwardPort(5900+screen, host, port);
    QUrl url = QString("vnc://localhost:%1").arg(screen);
    qDebug() << url;
@@ -34,6 +36,13 @@ void VNCWindow::show()
    ssh.start();
    while(!ssh.isInitialized()) {
       usleep(100);
+      if(ssh.isFinished()) {
+         /* something happened */
+         ssh.stop();
+         hide();
+         emit closed(screen);
+         return;
+      }
    }
    vnc->start();
 }
@@ -51,3 +60,9 @@ void VNCWindow::closeEvent(QCloseEvent *event)
    emit closed(screen);
 }
 
+void VNCWindow::portFailure(QString const& errmsg)
+{
+   QErrorMessage msg;
+   msg.showMessage(errmsg);
+   msg.exec();
+}

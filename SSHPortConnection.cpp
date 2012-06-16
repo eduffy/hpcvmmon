@@ -1,8 +1,5 @@
 
-#include <QErrorMessage>
 #include <QtDebug>
-#include <QHostInfo>
-#include <QHostAddress>
 #include "SSHCredentials.h"
 #include "SSHPortConnection.moc"
 
@@ -52,8 +49,10 @@ void SSHPortConnection::run()
                               &errmsg);
 
    if(rc != 0) {
+      emit failure(errmsg);
       qDebug() << "[SSH Port Error] " << errmsg;
       free(errmsg);
+      finished = 1;
    }
 }
 
