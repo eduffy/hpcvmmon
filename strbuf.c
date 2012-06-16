@@ -28,7 +28,7 @@ void sbprintf(struct StringBuffer *sb, char *format, ...)
    va_start(args, format);
    len = vsnprintf(NULL, 0, format, args);
    va_end(args);
-   if(remaining < len) {
+   if(remaining <= len) {
       ptrdiff_t size = sb->position - sb->buffer;
       ptrdiff_t capacity = 2 * (sb->end - sb->buffer);
       sb->buffer = realloc(sb->buffer, capacity);
