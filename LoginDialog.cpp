@@ -32,7 +32,7 @@ LoginDialog::LoginDialog(QWidget *parent)
    wConnect = new BusyButton("&Connect", this);
    wConnect->setDefault(true);
    connect(wConnect, SIGNAL(clicked()), this, SLOT(authenticate()));
-   bbox->addButton(wConnect, QDialogButtonBox::ActionRole);
+   bbox->addButton(wConnect, QDialogButtonBox::AcceptRole);
 
    setWindowTitle(tr("Connect to scheduler"));
    setFixedWidth(sizeHint().width() * 1.4);
