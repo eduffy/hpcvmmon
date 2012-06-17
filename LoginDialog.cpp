@@ -13,6 +13,7 @@ LoginDialog::LoginDialog(QWidget *parent)
    : QDialog(parent)
 {
    QFormLayout *layout = new QFormLayout(this);
+   layout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
 
    wHost = new QLineEdit();
    wHost->resize(150, wHost->height());
