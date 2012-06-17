@@ -69,6 +69,7 @@ int ssh2_forward_port(const char *hostip,
 
     /* Connect to SSH server */
     sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+    memset(&sin, 0, sizeof(sin));
     sin.sin_family = AF_INET;
     if (INADDR_NONE == (sin.sin_addr.s_addr = inet_addr(hostip))) {
         perror("inet_addr");
