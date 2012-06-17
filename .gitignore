@@ -10,3 +10,11 @@
 *.lai
 *.la
 *.a
+
+# waf files
+.lock-*
+.waf-*
+build
+
+# vim swap files
+.*.sw[a-z]
