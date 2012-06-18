@@ -25,6 +25,10 @@ protected slots:
    void commandFailed(QString const& error);
    void doubleClickSession();
 
+   void viewSessionSlot();
+   void removeSessionSlot();
+   void resumeSessionSlot();
+
 signals:
    void updated();
    void viewSession(JobDefinition *job);

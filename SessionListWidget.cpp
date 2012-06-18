@@ -1,5 +1,6 @@
 
 #include <QMenu>
+#include <QFont>
 #include <QContextMenuEvent>
 #include <QErrorMessage>
 #include <QtDebug>
@@ -148,14 +149,74 @@ void SessionListWidget::doubleClickSession()
 
 void SessionListWidget::contextMenuEvent(QContextMenuEvent *event)
 {
-qDebug() << event;
- QMenu *menu = new QMenu(this);
-        QModelIndex index = indexAt(event->pos());
-        if (index.isValid())
-          menu->addAction(QString("Row %1 - Col %2 was clicked on").arg(index.row()).arg(index.column()));
-        else
-          menu->addAction("No item was clicked on");
-        menu->exec(QCursor::pos());
+   QModelIndex index = indexAt(event->pos());
+   if (index.isValid()) {
+      JobDefinition &job = sessions[index.row()];
+      qDebug() << job;
 
+      QMenu *menu = new QMenu(this);
+      QAction *action;
+      switch(job.status) {
+         case JobDefinition::QUEUED: {
+            action = new QAction("Delete session", this);
+            action->setData(qVariantFromValue(&job));
+            connect(action, SIGNAL(triggered()), this, SLOT(removeSessionSlot()));
+            menu->addAction(action);
+
+            break;
+         }
+
+         case JobDefinition::HELD: {
+            menu->addAction("Resume session");
+            menu->addAction("Delete session");
+            break;
+         }
+
+         case JobDefinition::RUNNING: {
+            action = new QAction("View session", this);
+            QFont f = action->font();
+            f.setBold(true);
+            action->setFont(f);
+            action->setData(qVariantFromValue(&job));
+            connect(action, SIGNAL(triggered()), this, SLOT(viewSessionSlot()));
+            menu->addAction(action);
+
+            action = new QAction("Delete session", this);
+            action->setData(qVariantFromValue(&job));
+            connect(action, SIGNAL(triggered()), this, SLOT(removeSessionSlot()));
+            menu->addAction(action);
+            break;
+         }
+
+         case JobDefinition::FINISHED: {
+            menu->addAction("Resume session");
+            break;
+         }
+      }
+
+//      menu->addAction(QString("Row %1 - Col %2 was clicked on").arg(index.row()).arg(index.column()));
+      menu->exec(QCursor::pos());
+   }
+}
+
+void SessionListWidget::viewSessionSlot()
+{
+   const QVariant &itemData = currentItem()->data(0, Qt::UserRole);
+   JobDefinition *job = itemData.value<JobDefinition *>();
+   emit viewSession(job);
+}
+
+void SessionListWidget::removeSessionSlot()
+{
+   const QVariant &itemData = currentItem()->data(0, Qt::UserRole);
+   JobDefinition *job = itemData.value<JobDefinition *>();
+   emit removeSession(job);
+}
+
+void SessionListWidget::resumeSessionSlot()
+{
+   const QVariant &itemData = currentItem()->data(0, Qt::UserRole);
+   JobDefinition *job = itemData.value<JobDefinition *>();
+   emit resumeSession(job);
 }
 
