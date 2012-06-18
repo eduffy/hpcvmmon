@@ -11,7 +11,7 @@ def options(ctx):
 def configure(conf):
   conf.env.INCLUDES = [ '.' ]
   conf.env.DEFINES  = [ 'QTONLY' ]
-  conf.env.CFLAGS = [ '-Wall', '-O0', '-ggbd' ]
+  conf.env.CFLAGS   = [ '-Wall', '-O0', '-ggbd' ]
   conf.env.CXXFLAGS = [ '-Wall', '-O0', '-ggbd' ]
   conf.load('compiler_c')
   conf.load('compiler_cxx')
