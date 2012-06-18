@@ -35,6 +35,8 @@ def build(bld):
                   ],
        source   = [ 'vmman.cpp',
                     'SessionsWindow.cpp',
+                    'SessionListWidget.cpp',
+                    'JobDefinition.cpp',
                     'LoginDialog.cpp',
                     'AddSessionDialog.cpp',
                     'VNCWindow.cpp',
