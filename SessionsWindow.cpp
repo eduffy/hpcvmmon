@@ -38,15 +38,6 @@ SessionsWindow::SessionsWindow()
    connect(wSessionList, SIGNAL(releaseSession(JobDefinition *)),
            this,         SLOT(releaseSession(JobDefinition *)));
 
-   QAction *viewAction = new QAction("View session", this);
-   QFont f = viewAction->font();
-   f.setBold(true);
-   viewAction->setFont(f);
-   wSessionList->addAction(viewAction);
-
-   QAction *deleteAction = new QAction("Delete session", this);
-   wSessionList->addAction(deleteAction);
-
    wShowFinished = new QCheckBox("Show &completed jobs");
    wShowFinished->setDisabled(true);
    connect(wShowFinished, SIGNAL(stateChanged(int)), this, SLOT(toggleShowFinished(int)));
