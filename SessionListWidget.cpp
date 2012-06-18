@@ -167,8 +167,16 @@ void SessionListWidget::contextMenuEvent(QContextMenuEvent *event)
          }
 
          case JobDefinition::HELD: {
-            menu->addAction("Resume session");
-            menu->addAction("Delete session");
+            action = new QAction("Resume session", this);
+            action->setData(qVariantFromValue(&job));
+            connect(action, SIGNAL(triggered()), this, SLOT(releaseSessionSlot()));
+            menu->addAction(action);
+
+            action = new QAction("Delete session", this);
+            action->setData(qVariantFromValue(&job));
+            connect(action, SIGNAL(triggered()), this, SLOT(removeSessionSlot()));
+            menu->addAction(action);
+
             break;
          }
 
@@ -185,38 +193,45 @@ void SessionListWidget::contextMenuEvent(QContextMenuEvent *event)
             action->setData(qVariantFromValue(&job));
             connect(action, SIGNAL(triggered()), this, SLOT(removeSessionSlot()));
             menu->addAction(action);
+
             break;
          }
 
          case JobDefinition::FINISHED: {
-            menu->addAction("Resume session");
+            menu->addAction("Resume session [TODO]");
             break;
          }
       }
 
-//      menu->addAction(QString("Row %1 - Col %2 was clicked on").arg(index.row()).arg(index.column()));
       menu->exec(QCursor::pos());
    }
 }
 
 void SessionListWidget::viewSessionSlot()
 {
-   const QVariant &itemData = currentItem()->data(0, Qt::UserRole);
-   JobDefinition *job = itemData.value<JobDefinition *>();
+   QAction *action = dynamic_cast<QAction *>(sender());
+   JobDefinition *job = action->data().value<JobDefinition *>();
    emit viewSession(job);
 }
 
 void SessionListWidget::removeSessionSlot()
 {
-   const QVariant &itemData = currentItem()->data(0, Qt::UserRole);
-   JobDefinition *job = itemData.value<JobDefinition *>();
+   QAction *action = dynamic_cast<QAction *>(sender());
+   JobDefinition *job = action->data().value<JobDefinition *>();
    emit removeSession(job);
 }
 
 void SessionListWidget::resumeSessionSlot()
 {
-   const QVariant &itemData = currentItem()->data(0, Qt::UserRole);
-   JobDefinition *job = itemData.value<JobDefinition *>();
+   QAction *action = dynamic_cast<QAction *>(sender());
+   JobDefinition *job = action->data().value<JobDefinition *>();
    emit resumeSession(job);
+}
+
+void SessionListWidget::releaseSessionSlot()
+{
+   QAction *action = dynamic_cast<QAction *>(sender());
+   JobDefinition *job = action->data().value<JobDefinition *>();
+   emit releaseSession(job);
 }
 

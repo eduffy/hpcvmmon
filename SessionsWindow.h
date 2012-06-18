@@ -34,6 +34,7 @@ public:
 
 public slots:
    void authorized(SSHCredentials *credentials);
+   void commandFailed(QString const& error);
    void updateSessionList();
    void toggleShowFinished(int state);
    void vncSessionClosed(int screen);
@@ -52,6 +53,7 @@ public slots:
    void viewSession(JobDefinition *job);
    void removeSession(JobDefinition *job);
    void resumeSession(JobDefinition *job);
+   void releaseSession(JobDefinition *job);
 
 
 protected:

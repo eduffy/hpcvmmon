@@ -35,6 +35,8 @@ SessionsWindow::SessionsWindow()
            this,         SLOT(removeSession(JobDefinition *)));
    connect(wSessionList, SIGNAL(resumeSession(JobDefinition *)),
            this,         SLOT(resumeSession(JobDefinition *)));
+   connect(wSessionList, SIGNAL(releaseSession(JobDefinition *)),
+           this,         SLOT(releaseSession(JobDefinition *)));
 
    QAction *viewAction = new QAction("View session", this);
    QFont f = viewAction->font();
@@ -87,10 +89,16 @@ void SessionsWindow::show()
    loginDlg->show();
 }
 
+void SessionsWindow::commandFailed(QString const& error)
+{
+   QErrorMessage msg;
+   msg.showMessage(error);
+   msg.exec();
+}
 
 void SessionsWindow::viewSession(JobDefinition *job)
 {
-   qDebug() << job->pbsid;
+   qDebug() << *job;
   
    if(job->status == JobDefinition::RUNNING) {
       int screen = 1;
@@ -110,12 +118,23 @@ void SessionsWindow::viewSession(JobDefinition *job)
 
 void SessionsWindow::removeSession(JobDefinition *job)
 {
-   qDebug() << "remove " << job;
+   SSHCommand *sshCmd = new SSHCommand(sshCredentials);
+//   connect(sshCmd, SIGNAL(completed(QString)), this, SLOT(queueUpdated(QString)));
+//   connect(sshCmd, SIGNAL(failed(QString)),    this, SLOT(commandFailed(QString)));
+
+   sshCmd->Execute(QString("qdel %1").arg(job->pbsid));
+
 }
 
 void SessionsWindow::resumeSession(JobDefinition *job)
 {
-   qDebug() << "resume " << job;
+   qDebug() << "resume " << *job;
+}
+
+void SessionsWindow::releaseSession(JobDefinition *job)
+{
+   SSHCommand *sshCmd = new SSHCommand(sshCredentials);
+   sshCmd->Execute(QString("qrls %1").arg(job->pbsid));
 }
 
 void SessionsWindow::authorized(SSHCredentials *_sshCredentials)
@@ -164,7 +183,6 @@ void SessionsWindow::timerEvent(QTimerEvent *)
 {
    updateSessionList();
 }
-
 
 void SessionsWindow::toggleShowFinished(int state)
 {

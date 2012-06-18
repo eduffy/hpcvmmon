@@ -28,12 +28,14 @@ protected slots:
    void viewSessionSlot();
    void removeSessionSlot();
    void resumeSessionSlot();
+   void releaseSessionSlot();
 
 signals:
    void updated();
    void viewSession(JobDefinition *job);
    void removeSession(JobDefinition *job);
    void resumeSession(JobDefinition *job);
+   void releaseSession(JobDefinition *job);
 
 protected:
    void contextMenuEvent(QContextMenuEvent *event);
