@@ -209,28 +209,28 @@ void SessionListWidget::contextMenuEvent(QContextMenuEvent *event)
 
 void SessionListWidget::viewSessionSlot()
 {
-   QAction *action = dynamic_cast<QAction *>(sender());
+   QAction *action = qobject_cast<QAction *>(sender());
    JobDefinition *job = action->data().value<JobDefinition *>();
    emit viewSession(job);
 }
 
 void SessionListWidget::removeSessionSlot()
 {
-   QAction *action = dynamic_cast<QAction *>(sender());
+   QAction *action = qobject_cast<QAction *>(sender());
    JobDefinition *job = action->data().value<JobDefinition *>();
    emit removeSession(job);
 }
 
 void SessionListWidget::resumeSessionSlot()
 {
-   QAction *action = dynamic_cast<QAction *>(sender());
+   QAction *action = qobject_cast<QAction *>(sender());
    JobDefinition *job = action->data().value<JobDefinition *>();
    emit resumeSession(job);
 }
 
 void SessionListWidget::releaseSessionSlot()
 {
-   QAction *action = dynamic_cast<QAction *>(sender());
+   QAction *action = qobject_cast<QAction *>(sender());
    JobDefinition *job = action->data().value<JobDefinition *>();
    emit releaseSession(job);
 }
