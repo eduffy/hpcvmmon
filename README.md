@@ -22,10 +22,10 @@ I suggest using [Homebrew](http://mxcl.github.com/homebrew) to install the depen
     ./waf configure build
     
 ### Windows
-`vpcmmon` can be built using [MinGW & MSYS](http://www.mingw.org).  All dependencies have to be built and installed manually.
+`hpcvmmon` can be built using [MinGW & MSYS](http://www.mingw.org).  All dependencies have 
+to be built and installed manually.
 
 #### libz
-
     tar zxvf zlib-1.2.7.tar.gz
     cd zlib-1.2.7
     make -f win32/Makefile.gcc
@@ -57,3 +57,8 @@ I suggest using [Homebrew](http://mxcl.github.com/homebrew) to install the depen
 #### hpvvmmon
     ./waf configure build
     
+
+## TODO
+* Save qemu state / resume from saved state
+* Integrate with OrangeFS
+* 
