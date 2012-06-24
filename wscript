@@ -56,4 +56,6 @@ def build(bld):
                     'remoteview.cpp',
                     'vncview.cpp',
                     'vncclientthread.cpp',
+                    # resources
+                    'resources.qrc',
                   ])
