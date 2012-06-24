@@ -43,7 +43,7 @@ void SubmitJobThread::run()
       if(!submitFile.open(QIODevice::ReadOnly | QIODevice::Text))
          return;
       QString qsubSubmitTempl = submitFile.readAll();
-      qDebug() << qsubSubmitTempl;
+      submitFile.close();
 
       memory.chop(1);  // removes the `b` .. qemu wants 2g not 2gb
       QTextStream strm(&f);
