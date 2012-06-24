@@ -117,14 +117,16 @@ void SessionListWidget::queueUpdated(QString const& qstat)
    clear();
    QList<JobDefinition>::iterator p;
    for(p = sessions.begin(); p != sessions.end(); ++p) {
-      QTreeWidgetItem *item = new QTreeWidgetItem(this);
-      item->setText(0, p->name);
-      item->setText(1, QString("%1").arg(p->jobNumber));
-      item->setText(2, JobDefinition::StatusStr[p->status]);
-      item->setText(3, p->walltime);
-      item->setText(4, QString("%1").arg(p->cpupercent));
-      item->setText(5, QString("%1mb").arg(p->memMb));
-      item->setData(0, Qt::UserRole, qVariantFromValue(&(*p)));
+      if(p->jobNumber >= 0) {
+         QTreeWidgetItem *item = new QTreeWidgetItem(this);
+         item->setText(0, p->name);
+         item->setText(1, QString("%1").arg(p->jobNumber));
+         item->setText(2, JobDefinition::StatusStr[p->status]);
+         item->setText(3, p->walltime);
+         item->setText(4, QString("%1").arg(p->cpupercent));
+         item->setText(5, QString("%1mb").arg(p->memMb));
+         item->setData(0, Qt::UserRole, qVariantFromValue(&(*p)));
+      }
    }
 
    emit updated();
