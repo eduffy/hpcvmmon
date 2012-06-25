@@ -2,16 +2,21 @@
 #PBS -l select=1:ncpus=%1:mem=%2b,walltime=2:00:00
 #PBS -N %3
 #PBS -j oe
+
 workdir=/local_scratch/${USER}_${PBS_JOBID}
 mkdir -p ${workdir}
-echo \"SET JOB_NUMBER=${QEMU_VNC_JOB_NUMBER}\" > ${workdir}/RUNSCRIPT.BAT
+
+echo "SET JOB_NUMBER=${QEMU_VNC_JOB_NUMBER}" > ${workdir}/RUNSCRIPT.BAT
 for i in $(seq 2 9); do
-  echo \"SET JOB_NUMBER_Z${i}=$(printf %'0'${i}'d' ${QEMU_VNC_JOB_NUMBER})\" >> ${workdir}/RUNSCRIPT.BAT
+  echo "SET JOB_NUMBER_Z${i}=$(printf %'0'${i}'d' ${QEMU_VNC_JOB_NUMBER})" >> ${workdir}/RUNSCRIPT.BAT
 done
-echo \"SET JOB_HOST=$(hostname)\" >> ${workdir}/RUNSCRIPT.BAT
+echo "SET JOB_HOST=$(hostname)" >> ${workdir}/RUNSCRIPT.BAT
 sed -e '1,/^@/d' $0 >> ${workdir}/RUNSCRIPT.BAT
+
+# convert newlines to Windows-style; \r\n
 sed -e 's/$/\\r/' -i ${workdir}/RUNSCRIPT.BAT
-PATH=\"/home/joehsen/qemu-kvm-0.14.1/x86_64-softmmu:${PATH}\"
+
+PATH="/home/joehsen/qemu-kvm-0.14.1/x86_64-softmmu:${PATH}"
 export TMPDIR=/local_scratch
 VNC_DISPLAY=$((1+$(qstat -n ${PBS_JOBID} | egrep -o 'node..../[0-9]+' | awk -F/ '{print $2}')))
 
@@ -23,7 +28,7 @@ qemu-system-x86_64 \
    -snapshot -k en-us -vnc :${VNC_DISPLAY} \
    -fsdev local,id=scratch,path=/scratch/eduffy,security_model=passthrough \
    -tftp ${workdir}
-exit $?;
+exit $?
 
 # vim:syn=sh
 
